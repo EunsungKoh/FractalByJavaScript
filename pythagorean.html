@@ -1,0 +1,80 @@
+<html>
+<body>
+  <input type="text" id="input"/>
+  <button type="button" onclick="clicked()">insert</button>
+  <button type="button" onclick="erase()">clear</button>
+  <canvas id="canvas" width="3600" height="3500"></canvas>
+
+  <script type="text/javascript">
+  var elem = document.getElementById('canvas');
+  var context = elem.getContext('2d');
+
+  context.fillStyle = '#000';
+  context.lineWidth = 1;
+
+  var deg_to_rad = Math.PI / 180.0;
+  var depth;
+  function clicked() {
+    if (depth!=0) {
+      erase();
+    }
+    depth = document.getElementById('input').value;
+    context.beginPath();
+    drawPytha(500, 600, depth,1,0);
+    context.closePath();
+    context.stroke();
+  }
+  function erase() {
+    context.clearRect(0, 0, canvas.width, canvas.height);
+  }
+
+  function drawLine(x1, y1, x2, y2, brightness){
+    context.moveTo(x1, y1);
+    context.lineTo(x2, y2);
+  }
+
+  function drawRect(x1, y1,length,degree){
+    // drawRect
+    var x2 = x1 + (Math.cos(degree * deg_to_rad) * 100.0 *length);
+    var y2 = y1 + (Math.sin(degree * deg_to_rad) * 100.0 *length);
+    var x3 = x1 + (Math.cos((degree-90) * deg_to_rad) * 100.0 *length);
+    var y3 = y1 + (Math.sin((degree-90) * deg_to_rad) * 100.0 *length);
+    var x4 = x2 + (Math.cos((degree-90) * deg_to_rad) * 100.0 *length);
+    var y4 = y2 + (Math.sin((degree-90) * deg_to_rad) * 100.0 *length);
+    drawLine(x1, y1, x2, y2);
+    drawLine(x1, y1, x3, y3);
+    drawLine(x2, y2, x4, y4);
+    drawLine(x3, y3, x4, y4);
+
+  }
+  
+  function drawPytha(x1, y1, depth,length,degree){
+    var short_len=length/2;
+    var long_len=short_len*Math.sqrt(3);
+
+    if (depth!=0) {
+
+      var x3 = x1 + (Math.cos((degree-90) * deg_to_rad) * 100.0 *length);
+      var y3 = y1 + (Math.sin((degree-90) * deg_to_rad) * 100.0 *length);
+      var x4 = x3 + (Math.cos((degree) * deg_to_rad) * 100.0 *length);
+      var y4 = y3 + (Math.sin((degree) * deg_to_rad) * 100.0 *length);
+      var x5 = x4 + (Math.cos((degree-120) * deg_to_rad) * 100.0 *short_len);
+      var y5 = y4 + (Math.sin((degree-120) * deg_to_rad) * 100.0 *short_len);
+      if (depth==1) {
+
+      }
+      drawRect(x1, y1, length,degree);
+      drawRect(x3, y3, long_len,degree-30);
+      drawRect(x5, y5, short_len,degree+60);
+
+      drawPytha(x3,y3,depth-1,long_len,degree-30);
+      drawPytha(x5,y5,depth-1,short_len,degree+60);
+
+    }
+
+  }
+
+  </script>
+
+</body>
+</html>
